@@ -1,0 +1,24 @@
+Package: quickEDA
+Title: Quickstart EDA assumption testing for model validation.
+Version: 1.0.0
+Authors@R: person("Maxwell", "Bohling", email = "mbohling.developer@gmail.com", role = c("aut", "cre"))
+Description: Provides functions to quickly summarize assumptions 
+  needed in order to determine how to proceed in modeling your 
+  data using exploratory data analysis.  Can also be used to 
+  validate your model, making sure that your residuals are in statistical control.
+Depends: 
+  R (>= 3.4.2),
+  Hmisc,
+  nortest,
+  lawstat,
+  dplyr,
+  gap,
+  boot,
+  car,
+  fpp2,
+  astsa,
+  data.table
+License: MIT + file LICENSE.txt
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
