@@ -99,13 +99,31 @@ eda_varianceDrift <- function(y, testType = "barlett") {
 
   n = length(y)
 
-  if(testType == "levene") {
-    ## Load the car library, generate an arbitrary interval indicator
-    ## variable and run Levene's test.
+  findGroupSplit <- function(n) {
+    for (i in 4:10) {
+      if(n %% i == 0) {
+        foundFactor <- TRUE
+        return(i)
+      }
+      i <- i + 1
+    }
+    return(4)
+  }
 
-    kGroups = 4
+  foundFactor <- FALSE
+  kGroups <- 4
+  while(!foundFactor) {
+    kGroups <- findGroupSplit(n)
+    if(!foundFactor) {
+      y <- append(mean(y))
+      n = length(y)
+    }
+  }
+
+  if(testType == "levene") {
+
     int = as.factor(rep(1:kGroups,each=n/kGroups))
-    lt <- leveneTest(y, int, location = "median")
+    lt <- leveneTest(residuals_rmOL, int, location = "median", bootstrap = TRUE, kruskal.test = TRUE)
     diffVariation <- lt$`F value`[1] > qf(.95, df1 = kGroups - 1, df2 = n - kGroups)
     leveneTestResult = if_else(diffVariation, "YES", "NO")
 
@@ -115,7 +133,6 @@ eda_varianceDrift <- function(y, testType = "barlett") {
       cat("
           F-Value: ", lt$`F value`[1], "> Critical Value: ", qf(.95, df1 = kGroups - 1, df2 = n - kGroups),"
           Test for Variation Drift : FAIL
-
           ")
     } else {
       cat("
@@ -349,7 +366,7 @@ eda_SummaryStats <- function(y) {
 #' eda_ggPlot(rnorm(500))
 #' eda_ggPlot(rnorm(500), type = "hist")
 #' @export
-eda_plot <- function(y, type = c("run", "lag", "hist", "qqn", "spectrum")) {
+eda_plot <- function(y, type = c("run", "lag", "hist", "qqn", "spectrum"), binWidth = NULL) {
 
   if(!is.numeric(y)) {
     stop("Error: Input vector must be numeric.")
@@ -403,7 +420,7 @@ eda_plot <- function(y, type = c("run", "lag", "hist", "qqn", "spectrum")) {
     theme_light()
 }
 
-.plotHist <- function(y) {
+.plotHist <- function(y, binWidth = 30) {
 
   par(mfrow = c(1, 1))
 
@@ -411,12 +428,13 @@ eda_plot <- function(y, type = c("run", "lag", "hist", "qqn", "spectrum")) {
 
   ggplot(data = NULL, aes(x = y)) +
     ggtitle("Histogram/Density Overlay") +
-    xlab("Y : binWidth = 0.1") +
-    ylab("Freq") +
-    geom_histogram(binwidth = .1) +
-    geom_density(colour = "blue", aes(y = .1 * ..count..)) +
+    xlab(paste0("Data : binWidth = ", binWidth)) +
+    ylab("Frequency") +
+    geom_histogram(binwidth = binWidth) +
+    suppressWarnings(geom_density(col = "blue", aes(binWidth = binWidth, y = binWidth * ..count..))) +
     theme_light()
 }
+
 
 
 .plotQQNorm <- function(y) {
