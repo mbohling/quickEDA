@@ -108,7 +108,7 @@ eda_varianceDrift <- function(y, testType = "barlett") {
   if(testType == "levene") {
 
     int = as.factor(rep(1:kGroups,each=n/kGroups))
-    lt <- leveneTest(residuals_rmOL, int, location = "median", bootstrap = TRUE, kruskal.test = TRUE)
+    lt <- leveneTest(y, int, location = "median", bootstrap = TRUE, kruskal.test = TRUE)
     diffVariation <- lt$`F value`[1] > qf(.95, df1 = kGroups - 1, df2 = n - kGroups)
     leveneTestResult = if_else(diffVariation, "YES", "NO")
 
