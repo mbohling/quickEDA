@@ -99,25 +99,10 @@ eda_varianceDrift <- function(y, testType = "barlett") {
 
   n = length(y)
 
-  findGroupSplit <- function(n) {
-    for (i in 4:10) {
-      if(n %% i == 0) {
-        foundFactor <- TRUE
-        return(i)
-      }
-      i <- i + 1
-    }
-    return(4)
-  }
-
-  foundFactor <- FALSE
   kGroups <- 4
-  while(!foundFactor) {
-    kGroups <- findGroupSplit(n)
-    if(!foundFactor) {
-      y <- append(y, mean(y))
-      n = length(y)
-    }
+  while(n %% kGroups != 0) {
+    y <- append(y, mean(y))
+    n <- length(y)
   }
 
   if(testType == "levene") {
