@@ -61,7 +61,7 @@ eda_locationDrift <- function(y) {
 
   cat("
           Test Index Fit Straightline for Non-Zero Slope
-      ")
+")
 
   if(slopeDifZeroTestResult == "NO") {
     cat("
@@ -69,7 +69,7 @@ eda_locationDrift <- function(y) {
         t value for slope: ", coef(summary(mod))["x","t value"], "< Critical Value: ", qt(.95,n-2),"
         Test for Location Drift : PASS
 
-        ")
+")
   }
   else {
     cat("
@@ -77,7 +77,7 @@ eda_locationDrift <- function(y) {
         t value for slope: ", coef(summary(mod))["x","t value"], "> Critical Value: ", qt(.95,n-2),"
         Test for Location Drift : FAIL
 
-        ")
+")
   }
 }
 
@@ -118,13 +118,13 @@ eda_varianceDrift <- function(y, testType = "barlett") {
       cat("
           F-Value: ", lt$`F value`[1], "> Critical Value: ", qf(.95, df1 = kGroups - 1, df2 = n - kGroups),"
           Test for Variation Drift : FAIL
-          ")
+")
     } else {
       cat("
           F-Value: ", lt$`F value`[1], "< Critical Value: ", qf(.95, df1 = kGroups - 1, df2 = n - kGroups),"
           Test for Variation Drift : PASS
 
-          ")
+")
     }
   }
   else {
@@ -142,13 +142,13 @@ eda_varianceDrift <- function(y, testType = "barlett") {
           K-Squared: ", bartlett$statistic, "< Critical Value: ", qchisq(.95, bartlett$statistic),"
           Test for Variation Drift : PASS
 
-          ")
+")
     } else {
       cat("
           K-Squared: ", bartlett$statistic, "> Critical Value: ", qchisq(.95, bartlett$statistic),"
           Test for Variation Drift : FAIL
 
-          ")
+")
     }
   }
 }
@@ -173,11 +173,6 @@ eda_randomness <- function(y, plot.it = TRUE) {
 
   b_AC = acf(y, plot = FALSE)
 
-  # if(plot.it == TRUE) {
-  #   confIntervals = c(.90,.95)
-  #   plot(b_AC, confIntervals, main="Randomness Check", ylab="Autocorrelation")
-  # }
-
   a = acf(y, lag.max = 100, plot = FALSE)
   ac = round(a$acf[2],5)
 
@@ -193,20 +188,20 @@ eda_randomness <- function(y, plot.it = TRUE) {
 
   cat("
           Test Autocorrelation [2] below Significant Value
-      ")
+")
 
   if(autoCorrelationTestResult == "YES") {
     cat("
 Autocorrelation: ", abs(ac), "< Significant Value: ", sig_level,"
 Test for Random Data : PASS
 
-        ")
+")
   } else {
     cat("
 Autocorrelation: ", abs(ac), "> Significant Value: ", sig_level,"
 Test for Random Data : FAIL
 
-        ")
+")
   }
 
   ## Load the lawstat library and perform runs test for Randomness
@@ -220,13 +215,13 @@ Test for Random Data : FAIL
         Statistic: ", abs(rtest$statistic), "< Significant Value: ", pnorm(.95),"
         Test for Random Data : PASS
 
-        ")
+")
   } else {
     cat("
         Statistic: ", abs(rtest$statistic), "> Significant Value: ", pnorm(.95),"
         Test for Random Data : FAIL
 
-        ")
+")
   }
 }
 
@@ -253,14 +248,14 @@ eda_normality <- function(y){
 
   cat("
         Probabilty Plot Correlation Coefficients (PPCC) Normality Test
-      ")
+")
 
   if(ppccTestResult == "YES") {
     cat("
         PPCC: ", ppcc, "> Significant Value: ", .987,"
         Test for Random Data : PASS
 
-        ")
+")
   } else {
     cat("
         PPCC: ", ppcc, "< Significant Value: ", .987,"
@@ -284,13 +279,13 @@ eda_normality <- function(y){
         Test Statistic: ", abs(ad$statistic), "< Significant Value: ", unlist(ADCriticals[2,2]),"
         Test for Random Data : PASS
 
-        ")
+")
   } else {
     cat("
         Test Statistic: ", abs(ad$statistic), "> Significant Value: ", unlist(ADCriticals[2,2]),"
         Test for Random Data : FAIL
 
-        ")
+")
   }
 }
 
@@ -334,7 +329,7 @@ eda_SummaryStats <- function(y) {
   cat("
       Summary Statistics:
 
-      ")
+")
 
   df <- data_frame(Statistics, Values)
   print(as_tibble(df))
