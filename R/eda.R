@@ -115,7 +115,7 @@ eda_varianceDrift <- function(y, testType = "barlett") {
   while(!foundFactor) {
     kGroups <- findGroupSplit(n)
     if(!foundFactor) {
-      y <- append(mean(y))
+      y <- append(y, mean(y))
       n = length(y)
     }
   }
